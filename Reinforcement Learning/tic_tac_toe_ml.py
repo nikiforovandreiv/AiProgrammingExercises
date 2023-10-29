@@ -61,7 +61,7 @@ def update(global_history, history, player):
     cnt = 0
     for step in history:
         state, move = step
-        if cnt % 2 == 0 and player == 'O' or cnt % 2 != 0 and player == 'X':
+        if cnt % 2 == 0 and player == 'X' or cnt % 2 != 0 and player == 'O':
             global_history[state][move] += 3
         elif player == '/':
             global_history[state][move] += 1
@@ -92,6 +92,7 @@ def choose(weights):
         if roll <= weights[i]:
             return i
         roll -= weights[i]
+    return 0
 
 
 def choose_highest_value(weights):
@@ -125,7 +126,7 @@ def print_board(state):
 
 
 menace = {}
-for _ in range(100):
+for _ in range(500):
     train(menace)
 
 print(menace)
