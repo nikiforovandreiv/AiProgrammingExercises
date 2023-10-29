@@ -76,11 +76,13 @@ def train(global_history):
             global_history[state] = [NUM_GUMDROPS for _ in state if _ == '_']
         move = choose(global_history[state])
         history.append((state, move))
-        state = place(state, move)
+        state = place(state, find_empty_index(state, move))
     if win_check(state, 'X'):
         update(global_history, history, 'X')
     elif win_check(state, 'O'):
         update(global_history, history, 'O')
+    else:
+        update(global_history, history, '/')
 
 
 def choose(weights):
@@ -108,8 +110,24 @@ def find_empty_index(board, index):
     return empty_indices[index - 1]
 
 
-print(find_empty_index('__X_O_X__', 6))
-
-
 def initialise_board():
     return '_________'
+
+
+def print_board(state):
+    print("|", end="")
+    cnt = 1
+    for char in state:
+        print(char, end="|")
+        if cnt % 3 == 0 and cnt < len(state) - 1:
+            print("\n|", end="")
+        cnt += 1
+
+
+menace = {}
+for _ in range(100):
+    train(menace)
+
+print(menace)
+print_board("XXO_OX__O")
+
