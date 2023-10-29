@@ -17,6 +17,8 @@
 # | _ | X | _ | = 'O_O_X_X_X'
 # | X | _ | X |
 
+import random
+
 
 def win_check(board, player):
     # Rows and Columns
@@ -40,6 +42,15 @@ def win_check(board, player):
 
 def place(board, player, position):
     return board[:position] + player + board[position + 1:]
+
+
+def choose(weights):
+    total = sum(weights)
+    roll = random.randint(1, total + 1)
+    for i in range(len(weights)):
+        if roll <= weights[i]:
+            return i
+        roll -= weights[i]
 
 
 def initialise_board():
