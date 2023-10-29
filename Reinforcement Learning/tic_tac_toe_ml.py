@@ -105,10 +105,10 @@ def find_empty_index(board, index):
         if board[i] == '_':
             empty_indices.append(i)
 
-    return empty_indices[index]
+    return empty_indices[index - 1]
 
 
-print(find_empty_index('__X_O_X__', 3))
+print(find_empty_index('__X_O_X__', 6))
 
 
 def initialise_board():
