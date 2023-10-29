@@ -131,4 +131,3 @@ for _ in range(500):
 
 print(menace)
 print_board("XXO_OX__O")
-
