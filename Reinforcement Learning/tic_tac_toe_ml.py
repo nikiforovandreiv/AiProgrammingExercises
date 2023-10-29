@@ -39,13 +39,13 @@ def win_check(board, player):
 
     return False
 
+
 def is_final(state):
     if not win_check(state, 'X') and not win_check(state, 'O'):  # if X didn't win as well as O and board is full then
         for char in state:                                       # it's a draw
             if char == '_':
                 return False
     return True  # some player won, so the state is final
-
 
 
 def place(board, position):
@@ -57,19 +57,31 @@ def place(board, position):
     return board[:position] + player + board[position + 1:]
 
 
+def update(global_history, history, player):
+    cnt = 0
+    for step in history:
+        state, move = step
+        if cnt % 2 == 0 and player == 'O' or cnt % 2 != 0 and player == 'X':
+            global_history[state][move] += 3
+        elif player == '/':
+            global_history[state][move] += 1
+
+
 def train(global_history):
+    NUM_GUMDROPS = 1
     state = initialise_board()
-    history =[]
+    history = []
     while not is_final(state):
         if state not in global_history.keys():
             global_history[state] = [NUM_GUMDROPS for _ in state if _ == '_']
-            move = choose(global_history[state])
-            history.append((state, move))
-            state = place(state, move)
-    # if win_check(state, 'X'):
-    # elif win_check(state, 'O'):
-    # else:
-    # Update for winner
+        move = choose(global_history[state])
+        history.append((state, move))
+        state = place(state, move)
+    if win_check(state, 'X'):
+        update(global_history, history, 'X')
+    elif win_check(state, 'O'):
+        update(global_history, history, 'O')
+
 
 def choose(weights):
     total = sum(weights)
