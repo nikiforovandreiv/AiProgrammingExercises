@@ -42,7 +42,7 @@ def win_check(board, player):
 
 def is_final(state):
     if not win_check(state, 'X') and not win_check(state, 'O'):  # if X didn't win as well as O and board is full then
-        for char in state:                                       # it's a draw
+        for char in state:  # it's a draw
             if char == '_':
                 return False
     return True  # some player won, so the state is final
@@ -96,6 +96,19 @@ def choose_highest_value(weights):
     max_weight = max(weights)
     best_moves = [i for i in range(len(weights)) if weights[i] == max_weight]
     return random.choice(best_moves)
+
+
+def find_empty_index(board, index):
+    empty_indices = []
+
+    for i in range(len(board)):
+        if board[i] == '_':
+            empty_indices.append(i)
+
+    return empty_indices[index]
+
+
+print(find_empty_index('__X_O_X__', 3))
 
 
 def initialise_board():
