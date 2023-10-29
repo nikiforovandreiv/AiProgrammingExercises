@@ -125,9 +125,18 @@ def print_board(state):
         cnt += 1
 
 
+def play(model):
+    state = "_________"
+    while not is_final(state):
+        print_board(state)
+        i = int(input("\nchoose index: "))
+        state = place(state, i)
+        state = place(state, find_empty_index(state, choose_highest_value(model[state])))
+
+
+
 menace = {}
-for _ in range(500):
+for _ in range(20000):
     train(menace)
 
-print(menace)
-print_board("XXO_OX__O")
+play(menace)
