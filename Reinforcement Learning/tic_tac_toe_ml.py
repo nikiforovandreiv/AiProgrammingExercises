@@ -40,7 +40,12 @@ def win_check(board, player):
     return False
 
 
-def place(board, player, position):
+def place(board, position):
+    if board.count('X') > board.count('O'):
+        player = 'O'
+    else:
+        player = 'X'
+
     return board[:position] + player + board[position + 1:]
 
 
@@ -55,4 +60,3 @@ def choose(weights):
 
 def initialise_board():
     return '_________'
-
