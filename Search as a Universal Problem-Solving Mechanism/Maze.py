@@ -5,6 +5,7 @@ import queue
 class PathNotFound(BaseException):
     pass
 
+
 maze = [[' ', 'W', ' ', ' ', 'G'],
         [' ', 'W', ' ', 'W', ' '],
         [' ', 'W', ' ', ' ', ' '],
@@ -27,7 +28,8 @@ def nextStates(s):
         if pos_i < 0 or pos_i >= len(maze) or pos_j < 0 or pos_j >= len(maze[0]) or maze[pos_i][pos_j] == "W":
             return False
         return True
-    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)] # directions: up, down, left, right
+
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # directions: up, down, left, right
     return [(s[0] + d[0], s[1] + d[1]) for d in dirs if allowed(s, d)]
 
 
@@ -50,7 +52,7 @@ def breadthFirst(s):
 
 
 try:
-    startState = (len(maze)-1, 0)
+    startState = (len(maze) - 1, 0)
     print(breadthFirst(startState))
 
 except PathNotFound:

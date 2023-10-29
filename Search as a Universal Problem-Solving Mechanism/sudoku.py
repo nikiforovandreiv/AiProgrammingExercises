@@ -8,11 +8,13 @@ from copy import deepcopy
      [a9, b9, c9, ..., i9]
 '''
 
+
 class SudokuSolver:
     def __init__(self, initial_state):
         self.initial_state = initial_state
         self.current_state = self.initial_state
-        self.to_do = [[self.initial_state]]  # stores path, which store sequences of states [[st1, st2, ...], [st1, st2, ...], ...]
+        self.to_do = [[
+                          self.initial_state]]  # stores path, which store sequences of states [[st1, st2, ...], [st1, st2, ...], ...]
         path = self.depth_first_search()
         print(len(path))
 
@@ -80,21 +82,19 @@ class SudokuSolver:
     def depth_first_search(self):
         while self.to_do:
             current_path = self.to_do.pop()
-            #print(f'current path: {current_path}')
+            # print(f'current path: {current_path}')
             self.current_state = current_path[-1]
-            #print(f'current state: {self.current_state}')
+            # print(f'current state: {self.current_state}')
             # print(self.current_state)
             if self.is_goal():
                 return current_path
-            #print('not a goal')
+            # print('not a goal')
             for state in self.next_states():
-                #print(f'current state which we look {state}')
+                # print(f'current state which we look {state}')
                 to_append = deepcopy(current_path)
                 to_append.append(state)
-                #print(f'appended state {to_append}')
+                # print(f'appended state {to_append}')
                 self.to_do.append(to_append)
-
-
 
 
 starting_board = [
