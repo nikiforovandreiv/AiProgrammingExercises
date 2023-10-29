@@ -92,5 +92,10 @@ def choose(weights):
         roll -= weights[i]
 
 
+def choose_highest_value(weights):
+    max_weight = max(weights)
+    best_moves = [i for i in range(len(weights)) if weights[i] == max_weight]
+    return random.choice(best_moves)
+
 def initialise_board():
     return '_________'
