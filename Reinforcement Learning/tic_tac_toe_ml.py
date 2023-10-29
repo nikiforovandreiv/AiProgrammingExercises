@@ -65,6 +65,7 @@ def update(global_history, history, player):
             global_history[state][move] += 3
         elif player == '/':
             global_history[state][move] += 1
+        cnt += 1
 
 
 def train(global_history):
@@ -139,4 +140,5 @@ menace = {}
 for _ in range(20000):
     train(menace)
 
+print(menace)
 play(menace)
