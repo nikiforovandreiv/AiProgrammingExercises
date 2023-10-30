@@ -1,4 +1,5 @@
 # Author: Mikita Zyhmantovich
+# Implementation of BreadthFirstSearch for Maze
 import queue
 
 
@@ -13,7 +14,7 @@ maze = [[' ', 'W', ' ', ' ', 'G'],
         [' ', ' ', ' ', ' ', ' ']]
 
 
-def isGoal(s):
+def is_goal(s):
     i, j = s[0], s[1]
     if maze[i][j] == "G":
         return True
@@ -21,7 +22,7 @@ def isGoal(s):
         return False
 
 
-def nextStates(s):
+def next_states(state):
     def allowed(s, d):
         pos_i = s[0] + d[0]
         pos_j = s[1] + d[1]
@@ -30,30 +31,30 @@ def nextStates(s):
         return True
 
     dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # directions: up, down, left, right
-    return [(s[0] + d[0], s[1] + d[1]) for d in dirs if allowed(s, d)]
+    return [(state[0] + d[0], state[1] + d[1]) for d in dirs if allowed(state, d)]
 
 
-def breadthFirst(s):
-    toDo = queue.Queue()
-    toDo.put([s])
+def breadth_first(s):
+    to_do = queue.Queue()
+    to_do.put([s])
     explored = [s]
-    while not toDo.empty():
-        path = toDo.get()
+    while not to_do.empty():
+        path = to_do.get()
         current = path[-1]
-        if isGoal(current):
+        if is_goal(current):
             return path
-        for state in nextStates(current):
+        for state in next_states(current):
             if state not in explored:
                 new_path = path.copy()
                 new_path.append(state)
-                toDo.put(new_path)
+                to_do.put(new_path)
                 explored.append(state)
     raise PathNotFound
 
 
 try:
     startState = (len(maze) - 1, 0)
-    print(breadthFirst(startState))
+    print(breadth_first(startState))
 
 except PathNotFound:
     print("Path not found")

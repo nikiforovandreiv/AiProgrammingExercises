@@ -1,3 +1,6 @@
+# Author: Sergei Baginskiy
+# Implementation of BreadthFirstSearch for Sudoku
+
 from copy import deepcopy
 
 '''
@@ -13,8 +16,7 @@ class SudokuSolver:
     def __init__(self, initial_state):
         self.initial_state = initial_state
         self.current_state = self.initial_state
-        self.to_do = [[
-                          self.initial_state]]  # stores path, which store sequences of states [[st1, st2, ...], [st1, st2, ...], ...]
+        self.to_do = [[self.initial_state]]  # stores path, that stores sequences of states [[st1, st2, ...], [st1, st2, ...], ...]
         path = self.depth_first_search()
         print(len(path))
 

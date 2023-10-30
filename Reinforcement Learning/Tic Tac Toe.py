@@ -1,3 +1,5 @@
+# Authors: Mikita Zyhmantovich, Andrei Nikiforov
+# Implementation of Menace algorithm for Tic Tac Toe game
 # Placement information
 
 # | _ | _ | _ |

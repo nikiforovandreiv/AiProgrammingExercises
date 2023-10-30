@@ -1,3 +1,4 @@
+# Author: Andrei Nikiforov
 # Implementation of BreadthFirstSearch for n Queens
 
 def is_goal(state, n_queens):

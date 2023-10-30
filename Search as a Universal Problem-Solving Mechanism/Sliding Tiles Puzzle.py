@@ -1,3 +1,4 @@
+# Author: Andrei Nikiforov
 # Implementation of BreadthFirstSearch for Sliding Tiles Puzzle
 # s = state
 # d = direction

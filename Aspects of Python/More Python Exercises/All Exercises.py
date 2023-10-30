@@ -5,17 +5,19 @@ from copy import deepcopy
 
 
 # Exercise 1
+# Author: Mikita Zyhmantovich, Andrei Nikiforov
 def rev(input_element):
     if len(input_element) == 0:
         return input_element[:]
     return input_element[-1:] + rev(input_element[:-1])
 
 
-# print(rev("Hey"))
-# print(rev([1, 2, 3]))
+# print(rev("Mango"))
+# print(rev([1, 2, 3, 4]))
 
 
 # Exercise 2
+# Author: Andrei Nikiforov
 def fib(n, memo=None):
     if memo is None:
         memo = {}
@@ -34,9 +36,12 @@ def fib(n, memo=None):
 
 
 # Exercise 3
+# Author: Mikita Zyhmantovich, Andrei Nikiforov
 def nsp(x, y):
     if x == 0 or y == 0:
         return 1
+    elif x < 0 or y < 0:
+        return 0
     return nsp(x - 1, y) + nsp(x, y - 1)
 
 
@@ -44,6 +49,7 @@ def nsp(x, y):
 
 
 # Exercise 4
+# Author: Andrei Nikiforov
 def np(x, y, memo=None):
     if memo is None:
         memo = [[0 for _ in range(x + 1)] for _ in range(y + 1)]
@@ -68,6 +74,7 @@ def np(x, y, memo=None):
 
 
 # Exercise 5
+# Author: Andrei Nikiforov
 def solve(n):
     def is_safe(board, row, col):
         for i in range(len(board)):
@@ -98,4 +105,4 @@ def solve(n):
     solve_n_queens([['.' for _ in range(n)] for _ in range(n)], 0)
 
 
-solve(12)
+# solve(12)
