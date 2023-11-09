@@ -1,5 +1,5 @@
 # Author: Sergei Baginskiy
-# Implementation of BreadthFirstSearch for Sudoku
+# Implementation of DepthFirstSearch for Sudoku
 
 from copy import deepcopy
 
