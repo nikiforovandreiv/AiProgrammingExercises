@@ -1,6 +1,12 @@
 # Author: Sergei Baginskiy
 # Implementation of DepthFirstSearch for Sudoku
 
+# TODO list:
+# 1. Add the checker of already visited state
+# 2. Add the 'unsolvable' error
+# 3. Commentate the code
+# 4. Make the output format readable
+
 from copy import deepcopy
 
 '''
