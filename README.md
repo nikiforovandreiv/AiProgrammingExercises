@@ -7,6 +7,6 @@
 ### Team: 
 - Mikita Zyhmantovich
 - Andrei Nikiforov
-- Sergei Baginskii 
+- Sergei Baginskii - 22205148
 - Oleksii Kalashnikov
 - Vladyslav Chornyi
