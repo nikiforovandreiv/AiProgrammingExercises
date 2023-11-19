@@ -141,7 +141,7 @@ def find_empty_index(board, index):
         if board[i] == '_':
             empty_indices.append(i)
 
-    return empty_indices[index - 1]
+    return empty_indices[index]
 
 
 def initialise_board():
