@@ -9,15 +9,21 @@
 # PLacement index
 # | 0 | 1 | 2 |
 # | 3 | 4 | 5 | = '012345678'
-# | 6 | 7 | 9 |
+# | 6 | 7 | 8 |
 
-# | X | _ | O |
-# | _ | X | _ | = 'X_O_X_O_X'
-# | O | _ | X |
+# Symmetries (90 degree turns)
 
-# | O | _ | O |
-# | _ | X | _ | = 'O_O_X_X_X'
-# | X | _ | X |
+# | 6 | 3 | 0 |
+# | 7 | 4 | 1 | = '630741852'
+# | 8 | 5 | 2 |
+
+# | 8 | 7 | 6 |
+# | 5 | 4 | 3 | = '876543210'
+# | 2 | 1 | 0 |
+
+# | 2 | 5 | 8 |
+# | 1 | 4 | 7 | = '258147036'
+# | 0 | 3 | 6 |
 
 import random
 
@@ -40,6 +46,23 @@ def win_check(board, player):
         return True
 
     return False
+
+
+def find_symmetries(state):
+    symmetries = []
+    symmetry = ""
+    for i in range(6, len(state)):
+        symmetry += state[i] + state[i - 3] + state[i - 6]
+    symmetries.append(symmetry)
+    symmetry = ""
+    for i in range(len(state)-1, -1, -1):
+        symmetry += state[i]
+    symmetries.append(symmetry)
+    symmetry = ""
+    for i in range(2, -1, -1):
+        symmetry += state[i] + state[i + 3] + state[i + 6]
+    symmetries.append(symmetry)
+    return symmetries
 
 
 def is_final(state):
@@ -71,11 +94,18 @@ def update(global_history, history, player):
 
 
 def train(global_history):
-    NUM_GUMDROPS = 1
+    NUM_GUMDROPS = 3
     state = initialise_board()
     history = []
     while not is_final(state):
-        if state not in global_history.keys():
+        symmetries = [state] + find_symmetries(state)
+        in_history = False
+        for symmetry in symmetries:
+            if symmetry in global_history.keys():
+                in_history = True
+                global_history[state] = global_history[symmetry]
+                break
+        if not in_history:
             global_history[state] = [NUM_GUMDROPS for _ in state if _ == '_']
         move = choose(global_history[state])
         history.append((state, move))
@@ -134,7 +164,18 @@ def play(model):
         print_board(state)
         i = int(input("\nchoose index: "))
         state = place(state, i)
-        state = place(state, find_empty_index(state, choose_highest_value(model[state])))
+        if state in model:
+            state = place(state, find_empty_index(state, choose_highest_value(model[state])))
+        else:
+            continue
+    print_board(state)
+    print()
+    if win_check(state, 'X'):
+        print("Player X won")
+    elif win_check(state, 'O'):
+        print("Player O won")
+    else:
+        print("It's a draw")
 
 
 menace = {}
