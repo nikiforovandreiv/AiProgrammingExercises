@@ -5,7 +5,7 @@ from copy import deepcopy
 
 
 # Exercise 1
-# Author: Mikita Zyhmantovich, Andrei Nikiforov
+# Author: Mikita Zyhmantovich
 def rev(input_element):
     if len(input_element) == 0:
         return input_element[:]
@@ -36,7 +36,7 @@ def fib(n, memo=None):
 
 
 # Exercise 3
-# Author: Mikita Zyhmantovich, Andrei Nikiforov
+# Author: Mikita Zyhmantovich
 def nsp(x, y):
     if x == 0 or y == 0:
         return 1
