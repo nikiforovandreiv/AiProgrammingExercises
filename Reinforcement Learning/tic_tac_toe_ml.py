@@ -135,7 +135,6 @@ def play(model):
         state = place(state, find_empty_index(state, choose_highest_value(model[state])))
 
 
-
 menace = {}
 for _ in range(20000):
     train(menace)

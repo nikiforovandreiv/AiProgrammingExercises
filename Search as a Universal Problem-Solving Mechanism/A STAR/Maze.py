@@ -1,6 +1,6 @@
 # Author: Mikita Zyhmantovich
-# Breadth first search implementation for Maze problem
-import queue
+# A* implementation to solve the Maze puzzle
+import math
 
 
 class PathNotFound(BaseException):
@@ -12,6 +12,14 @@ maze = [[' ', 'W', ' ', ' ', 'G'],
         [' ', 'W', ' ', ' ', ' '],
         [' ', ' ', 'W', 'W', ' '],
         [' ', ' ', ' ', ' ', ' ']]
+
+
+def findGoal():
+    for i in range(len(maze)):
+        for j in range(len(maze)):
+            if maze[i][j] == "G":
+                return i, j
+    raise PathNotFound
 
 
 def isGoal(s):
@@ -34,12 +42,17 @@ def nextStates(s):
     return [(s[0] + d[0], s[1] + d[1]) for d in dirs if allowed(s, d)]
 
 
-def breadthFirst(s):
-    toDo = queue.Queue()
-    toDo.put([s])
+def aStarSearch(s):
+    goal = findGoal()
+
+    def h(path):
+        return abs(path[-1][0] - goal[0]) + abs(path[-1][1] - goal[1])
+
+    toDo = [[s]]
     explored = [s]
-    while not toDo.empty():
-        path = toDo.get()
+    while len(toDo) != 0:
+        toDo.sort(key=h, reverse=True)
+        path = toDo.pop()
         current = path[-1]
         if isGoal(current):
             return path
@@ -47,14 +60,14 @@ def breadthFirst(s):
             if state not in explored:
                 new_path = path.copy()
                 new_path.append(state)
-                toDo.put(new_path)
+                toDo.append(new_path)
                 explored.append(state)
     raise PathNotFound
 
 
 try:
     startState = (len(maze) - 1, 0)
-    print(breadthFirst(startState))
+    print(aStarSearch(startState))
 
 except PathNotFound:
     print("Path not found")
