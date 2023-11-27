@@ -159,7 +159,7 @@ class Menace:
                     self._menace_system[event[0]][event[1]] += 1
 
     def __str__(self):
-        "Magic method used in debugging"
+        """Magic method used in debugging"""
         return f"There are {len(self._menace_system)} variants in the system"
 
     def menace_vs_player(self):
