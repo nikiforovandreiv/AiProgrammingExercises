@@ -1,7 +1,10 @@
 """
+Author: Sergei Baginskii
+
+Version of MENACE with symmetry checking
+
 For now, the model more or less works.
-However, it seems, in the situation that both players can win with the next move, and pc makes the turn,
-it, for some reason prefers to defend rather that win the game.
+However, it often makes moves that makes no sense whatsoever
 """
 
 import random
