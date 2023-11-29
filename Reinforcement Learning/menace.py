@@ -37,7 +37,7 @@ class Menace:
         history = []  # stores tuples of (board, move)
 
         # cycle goes until game is over
-        while self.game_over(board) == -1:
+        while self.game_over(board) == "?":
 
             if board not in self._menace_system:
                 new_board, symmetry_type = symmetry.find_symm(self._menace_system, board, self._symm_dict)
@@ -70,6 +70,7 @@ class Menace:
                 for i, elem in enumerate(board):
                     if elem == "_":
                         possible_moves.append(i)
+
             move = random.choice(possible_moves)
 
             # if we originally discovered the board as a symmetry, we should convert back
@@ -84,7 +85,7 @@ class Menace:
 
     def make_move(self, board, move):
         move_count = 0
-
+        # to determine who is making a move now
         for elem in board:
             if elem == "_":
                 move_count += 1
@@ -98,50 +99,30 @@ class Menace:
 
     def game_over(self, board):
         """
-        Awfully written part, it just checks if there is a winner, need to rewrite (works tho).
         :param board:
-        :return: 0 = draw, 1 = crosses, 2 = circles, -1 - no winner
+        :return: / = draw, X = crosses, O = circles, ? - no winner
         """
+        # Rows and Columns
+        for player in ["X", "O"]:
+            for i in range(3):
+                # Rows
+                if all(board[i * 3 + j] == player for j in range(3)):
+                    return player
+                # Columns
+                if all(board[j * 3 + i] == player for j in range(3)):
+                    return player
 
-        is_draw = True
-        for elem in board:
-            if elem == "_":
-                is_draw = False
-        if is_draw:
-            return 0
-
-        # check for horizontal win
-        if (board[0] == board[1] == board[2] == "X" or
-                board[3] == board[4] == board[5] == "X" or
-                board[6] == board[7] == board[8] == "X"):
-            return "X"
-
-        if (board[0] == board[1] == board[2] == "O" or
-                board[3] == board[4] == board[5] == "O" or
-                board[6] == board[7] == board[8] == "O"):
-            return "O"
-
-        # check for vertical win
-        if (board[0] == board[3] == board[6] == "X" or
-                board[1] == board[4] == board[7] == "X" or
-                board[2] == board[5] == board[8] == "X"):
-            return "X"
-
-        if (board[0] == board[3] == board[6] == "O" or
-                board[1] == board[4] == board[7] == "O" or
-                board[2] == board[5] == board[8] == "O"):
-            return "O"
-
-        # check for diagonal win
-        if (board[0] == board[4] == board[8] == "X" or
-                board[2] == board[4] == board[6] == "X"):
-            return "X"
-
-        if (board[0] == board[4] == board[8] == "O" or
-                board[2] == board[4] == board[6] == "O"):
-            return "O"
-
-        return -1
+            # Top-Left to Bottom-Right Diagonals
+            if all(board[i * 3 + i] == player for i in range(3)):
+                return player
+            # Bottom-Left to Top-Right Diagonals
+            if all(board[i * 3 + 2 - i] == player for i in range(3)):
+                return player
+            # If there is no winner yet, the position is either not final or a draw
+            for char in board:  # Check if it's final
+                if char == '_':
+                    return "?"
+            return "/"
 
     def update_menace(self, history, winner):
         """
@@ -165,18 +146,29 @@ class Menace:
         """Magic method used in debugging"""
         return f"There are {len(self._menace_system)} variants in the system"
 
+    def print_board(self, state):
+        print("|", end="")
+        cnt = 1
+        for char in state:
+            print(char, end="|")
+            if cnt % 3 == 0 and cnt < len(state) - 1:
+                print("\n|", end="")
+            cnt += 1
+        print()
+
     def menace_vs_player(self):
         symmetry_type = ""
 
         board = "_________"
+        self.print_board("123456789")
         turn = 1
 
         # for now, it assumes you make only correct turns and if the game ends in a draw it says player won
-        while True:
+        while self.game_over(board) == "?":
             # player's turn
-            turn = int(input("make a turn\n"))
+            turn = int(input("Make a turn: \n"))
             board = self.make_move(board, turn - 1)
-            if self.game_over(board) != -1:
+            if self.game_over(board) != "?":
                 print("player won")
                 break
 
@@ -216,15 +208,18 @@ class Menace:
                 board, move = symmetry.revert_symm(move, board, symmetry_type, self._symm_dict)
 
             board = self.make_move(board, move)
-            print(board)
-            if self.game_over(board) != -1:
-                print("pc won")
-                break
+            self.print_board(board)
+        if self.game_over(board) == "X":
+            print("Player X won")
+        elif self.game_over(board) == "O":
+            print("Player O won")
+        else:
+            print("It's a draw")
 
 
 if __name__ == "__main__":
     menace = Menace()
-    for _ in range(5000):
+    for _ in range(10000):
         menace.play_game()
 
     print(menace)
