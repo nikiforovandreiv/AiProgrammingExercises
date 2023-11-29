@@ -8,6 +8,7 @@ rng = np.random.default_rng(123)
 
 sigmoid = lambda x: 1 / (1 + math.e ** -x)
 
+
 class Perceptron:
     def __init__(self, ninp, activation=sigmoid):
         self.ninp = ninp
@@ -23,7 +24,7 @@ class Perceptron:
 
     def train(self, trainset, batch_size=1):
         eta = 0.5
-        maxiter = 1000
+        maxiter = 100
         while maxiter > 0:
             oldweights = np.copy(self.weights)
             delta = [0 for _ in range(len(self.weights))]
@@ -50,10 +51,9 @@ class Perceptron:
         for digit in range(2):
             for sample in range(len(test_set[digit])):
                 b = self.out(list(itertools.chain.from_iterable(test_set[digit][sample])))
-                print(b)
                 output = round(b)
                 target = digit
-                print(f"Predicted: {output} \n Truth: {target}")
+                # print(f"Predicted: {output} \n Truth: {target}")
                 truth.append(target)
                 predicted.append(output)
         return accuracy_score(truth, predicted)
@@ -75,14 +75,14 @@ def create_dataset(size):
             new_digit = [[0 for _ in range(4)] for _ in range(4)]
             for i in range(4):
                 for j in range(4):
-                    new_digit[i][j] = ideal[key][i][j]
+                    new_digit[i][j] = ideal[key][i][j] + np.random.normal(0, 0.5)
             data[key].append(new_digit)
     return data
 
 
 digits_classifier = Perceptron(16)
-train_dataset = create_dataset(900)
-test_dataset = create_dataset(100)
+train_dataset = create_dataset(90)
+test_dataset = create_dataset(10)
 digits_classifier.train(train_dataset)
 accuracy = digits_classifier.measure(test_dataset)
 print(f"Test accuracy is: {accuracy * 100}%")
