@@ -8,14 +8,15 @@ However, it often makes moves that makes no sense whatsoever
 """
 
 import random
-
+import supervisor
 import symmetry
 
 
 class Menace:
-    def __init__(self):
+    def __init__(self, supervise=False):
         self._menace_system = {}
-
+        self.supervise = supervise
+        # parameter supervise enables bot, that makes "good" moves for menace to study better
         # dictionary containing all possible symmetries of a board. It has the following syntax:
         # numbers in the arrays in the dictionary represent in which places will the elements from old board
         # now be staying (i.e. in rotation for 90 degrees CLOCKWISE first element will be on the third place).
@@ -32,13 +33,16 @@ class Menace:
 
     def play_game(self):
         symmetry_type = ""
-
+        menace_turn = "O"
+        supervisor_turn = "X"
         board = "_________"
         history = []  # stores tuples of (board, move)
-
         # cycle goes until game is over
         while self.game_over(board) == "?":
-
+            if self.supervise:
+                # supervisor makes a move
+                supervisor_move = supervisor.supervise(board, supervisor_turn)
+                board = self.make_move(board, supervisor_move)
             if board not in self._menace_system:
                 new_board, symmetry_type = symmetry.find_symm(self._menace_system, board, self._symm_dict)
 
@@ -124,7 +128,7 @@ class Menace:
                     return "?"
             return "/"
 
-    def update_menace(self, history, winner):
+    def update_menace(self, history, winner, menace_turn="O"):
         """
         System learns based on the previous game.
         Indexation in updating system means that we increase or decrease the number of "gumdrops" in the
@@ -169,7 +173,6 @@ class Menace:
             turn = int(input("Make a turn: \n"))
             board = self.make_move(board, turn - 1)
             if self.game_over(board) != "?":
-                print("player won")
                 break
 
             # menace's turn
@@ -218,6 +221,7 @@ class Menace:
 
 
 if __name__ == "__main__":
+
     menace = Menace()
     for _ in range(10000):
         menace.play_game()

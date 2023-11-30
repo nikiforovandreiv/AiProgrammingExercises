@@ -178,9 +178,9 @@ def play(model):
         print("It's a draw")
 
 
-menace = {}
-for _ in range(20000):
-    train(menace)
-
-print(menace)
-play(menace)
+# menace = {}
+# for _ in range(20000):
+#     train(menace)
+#
+# print(menace)
+# play(menace)
