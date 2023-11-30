@@ -33,16 +33,18 @@ class Menace:
 
     def play_game(self):
         symmetry_type = ""
-        menace_turn = "O"
-        supervisor_turn = "X"
+        menace_turn = random.choice(["X", "O"])
+        supervisor_turn = "X" if menace_turn == "O" else "O"
         board = "_________"
         history = []  # stores tuples of (board, move)
         # cycle goes until game is over
         while self.game_over(board) == "?":
-            if self.supervise:
-                # supervisor makes a move
+            if self.supervise and supervisor_turn == "X":
+                # supervisor X makes a move
                 supervisor_move = supervisor.supervise(board, supervisor_turn)
                 board = self.make_move(board, supervisor_move)
+                if self.game_over(board) != "?":
+                    break
             if board not in self._menace_system:
                 new_board, symmetry_type = symmetry.find_symm(self._menace_system, board, self._symm_dict)
 
@@ -83,6 +85,11 @@ class Menace:
 
             history.append((board, move))
             board = self.make_move(board, move)
+
+            if self.supervise and supervisor_turn == "O" and self.game_over(board) == "?":
+                # supervisor O makes a move after menace
+                supervisor_move = supervisor.supervise(board, supervisor_turn)
+                board = self.make_move(board, supervisor_move)
 
         winner = self.game_over(board)
         self.update_menace(history, winner)
@@ -134,14 +141,23 @@ class Menace:
         Indexation in updating system means that we increase or decrease the number of "gumdrops" in the
         corresponding turn possibility pool.
         """
+        if self.supervise:
+            for i, event in enumerate(history):
+                if winner == "/":
+                    self._menace_system[event[0]][event[1]] += 1
+                if winner == menace_turn:
+                    self._menace_system[event[0]][event[1]] += 3
+                if winner != menace_turn and self._menace_system[event[0]][event[1]] > 1:
+                    self._menace_system[event[0]][event[1]] -= 1
+            return
         for i, event in enumerate(history):
             if i % 2 == 0:
                 if winner == "X":
                     self._menace_system[event[0]][event[1]] += 1
-                if winner == "O":
+                if winner == "O" and self._menace_system[event[0]][event[1]] > 0:
                     self._menace_system[event[0]][event[1]] -= 1
             if i % 2 == 1:
-                if winner == "X":
+                if winner == "X" and self._menace_system[event[0]][event[1]] > 0:
                     self._menace_system[event[0]][event[1]] -= 1
                 if winner == "O":
                     self._menace_system[event[0]][event[1]] += 1
@@ -162,6 +178,7 @@ class Menace:
 
     def menace_vs_player(self):
         symmetry_type = ""
+        print(self._menace_system)
 
         board = "_________"
         self.print_board("123456789")
@@ -223,7 +240,7 @@ class Menace:
 if __name__ == "__main__":
 
     menace = Menace()
-    for _ in range(10000):
+    for _ in range(20000):
         menace.play_game()
 
     print(menace)
