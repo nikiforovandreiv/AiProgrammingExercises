@@ -20,7 +20,7 @@ class Perceptron:
         return o
 
     def train(self, trainset):
-        eta = 0.9
+        eta = 0.7
         maxiter = 100
         L = len(trainset)
         while maxiter > 0:
@@ -36,7 +36,7 @@ class Perceptron:
             if maxiter % 10 == 0:
                 print(f"new weights {self.weights}")
 
-            if (oldweights == self.weights).all:
+            if set(oldweights) == set(self.weights):
                 return self.weights
             maxiter = maxiter - 1
         return self.weights
