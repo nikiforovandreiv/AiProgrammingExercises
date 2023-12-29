@@ -2,7 +2,7 @@
 Author: Sergei Baginskii
 """
 import numpy as np
-import data_creater
+import data_creator
 
 
 def threshold(x):
@@ -13,7 +13,7 @@ class Perceptron:
     rng = np.random.default_rng()
 
     # data of ideally looking numbers
-    ideal_data = data_creater.create_data()
+    ideal_data = data_creator.create_data()
 
     def __init__(self, goal, activation_func=threshold):
         # constants
@@ -22,7 +22,7 @@ class Perceptron:
         # variables
         self.goal = goal  # which number are we training our perceptron for
         self.activation = activation_func
-        self.data = data_creater.DataCreator(Perceptron.ideal_data, self.dataset_size)
+        self.data = data_creator.DataCreator(Perceptron.ideal_data, self.dataset_size)
         self.num_inputs = self.data.dimensions[0] * self.data.dimensions[1]  # number of variables
         self.weights = Perceptron.rng.random(self.num_inputs + 1)
 
