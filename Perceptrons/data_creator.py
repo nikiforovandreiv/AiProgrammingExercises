@@ -2,22 +2,23 @@
 Author: Sergei Baginskii
 
 This creates a dataset of following format:
-((dim_1, dim_2), dataset[[data1_1, ..., data_1_n, result_1],
-                         [data2_1, ..., data2_n, result_2], ... ]).
+((dim_1, dim_2), dataset[[data1_1, ..., data_1_n, current_number],
+                         [data2_1, ..., data2_n, current_number], ... ]).
 
-With dim_1 and dim_2 we can work with graphic dataset, if needed.
+dim_1, dim_2 are dimensions of the digit image and helps with several calculations.
 """
 import numpy as np
 
 
-def create_data():
+def create_dataset():
     dimensions = (4, 4)
 
-    ideal_0 = np.array([[0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0]], dtype=float)
-    ideal_1 = np.array([[0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1]], dtype=float)
-    ideal_2 = np.array([[0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2]], dtype=float)
-    ideal_4 = np.array([[1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4]], dtype=float)
-    ideal_7 = np.array([[1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 7]], dtype=float)
+    # for simplicity, the numbers are stored in flattened 2-dim arrays.
+    ideal_0 = np.array([0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0], dtype=float)
+    ideal_1 = np.array([0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1], dtype=float)
+    ideal_2 = np.array([0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2], dtype=float)
+    ideal_4 = np.array([1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4], dtype=float)
+    ideal_7 = np.array([1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 7], dtype=float)
     ideal_nums = np.array([ideal_0, ideal_1, ideal_2, ideal_4, ideal_7])
 
     data_input = (dimensions, ideal_nums)
@@ -39,7 +40,7 @@ class DataCreator:
         self.dataset_size = dataset_size
 
         # containers
-        self._dataset = np.array([[]])
+        self._dataset = np.empty((self.dataset_size, self._dimensions[0] * self._dimensions[1] + 1))
 
         # methods
         self.create_dataset()
@@ -49,13 +50,12 @@ class DataCreator:
         """
         We populate the dataset with the roughly same number of every type of the element.
         """
-        self._dataset = self.ideal_data[0]
-        for i in range(1, self.dataset_size):
-            self._dataset = np.concatenate((self._dataset, self.ideal_data[i % self.num_ideal_objects]))
+        for i in range(0, self.dataset_size):
+            self._dataset[i] = self.ideal_data[i % self.num_ideal_objects]
 
     def apply_noise(self):
         """
-        Applies normally distributed noise to our dataset.
+        Applies uniformly distributed noise to our dataset.
 
         Since we want to access all the elements except last ones in each row, it is faster to transpose the
         dataset and access every element except those in the last row.
@@ -78,7 +78,7 @@ class DataCreator:
 
 
 if __name__ == "__main__":
-    data_cells = create_data()
+    data_cells = create_dataset()
     data_size = 100
 
     dataset_creator = DataCreator(data_cells, data_size)
