@@ -13,7 +13,7 @@ class Perceptron:
     rng = np.random.default_rng()
 
     # data of ideally looking numbers
-    ideal_data = data_creator.create_data()
+    ideal_data = data_creator.create_dataset()
 
     def __init__(self, goal, activation_func=threshold):
         # constants
