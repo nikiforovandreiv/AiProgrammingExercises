@@ -207,37 +207,41 @@ def trial11():
     return s
 
 def trial12():
-    rs = [Int("rs[{i}]") for i in range(9)]
-    signs = [Bool("signs[{i}]") for i in range(9)]
+    r1, r2, r3, r4, r5, r6, r7, r8, r9 = Ints("r1 r2 r3 r4 r5 r6 r7 r8 r9")
+    rs = [r1, r2, r3, r4, r5, r6, r7, r8, r9]
     # rs[i] = 0, if tiger in room i+1
     #         1, if lady in room i+1
-     #        2, if room i is empty i+1
+    #         2, if room i is empty i+1
     range_cond = [(0 <= r) & (r <= 2) for r in rs]
     one_lady = Sum([If(r == 1, 1, 0) for r in rs]) == 1
     
-    signs[0] = (rs[0] == 1) | (rs[2] == 1) | (rs[4] == 1) | (rs[6]== 1) | (rs[8] == 1)
-    signs[1] = rs[1] == 2
-    signs[2] = Xor(signs[4], ~signs[6]) 
-    signs[3] = ~signs[0]
-    signs[4] = Xor(signs[1], signs[3])
-    signs[5] = ~signs[2]
-    signs[6] = rs[0] != 1
-    signs[7] = (rs[7] == 0) & (rs[8] == 2)
-    signs[8] = (rs[8] == 0) & ~signs[5]
+    signs1 = (rs[0] == 1) | (rs[2] == 1) | (rs[4] == 1) | (rs[6]== 1) | (rs[8] == 1)
+    signs2 = rs[1] == 2
+    signs7 = rs[0] != 1
+    
+    signs4 = ~signs1
+    signs5 = signs4 | signs2
+    signs7 = rs[0] != 1
+    signs3 = signs5 | ~signs7
+    signs6 = ~signs3
+
+    signs8 = (rs[7] == 0) & (rs[8] == 2)
+    signs9 = (rs[8] == 0) & ~signs6
+    signs = [signs1 , signs2, signs3, signs4, signs5, signs6, signs7, signs8, signs9]
     sign_cond = [Implies(rs[i] == 0, ~signs[i]) & \
                  Implies(rs[i] == 1, signs[i]) for i in range(9)]
     cond1 = rs[7] != 2
-    print(rs)
+    # cond2 = rs[6] != 1
     s = Solver()
     s.add(range_cond)
     s.add(one_lady)
     s.add(sign_cond)
     s.add(cond1)
-
+    
     return s
 
 if __name__ == "__main__":
     s = trial12()
     print(s.check())
-    # print(s.model())
+    print(s.model())
     
