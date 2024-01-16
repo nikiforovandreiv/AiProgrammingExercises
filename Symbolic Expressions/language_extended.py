@@ -255,6 +255,10 @@ class Neg(Unop):
     name = "-"
     op = lambda self, x: -x
 
+    def __init__(self, expr):
+        super().__init__(expr)
+        self.original_expr = self.expr
+
     def diff(self, name):
         return Neg(self.expr.diff(name))
 
@@ -266,6 +270,9 @@ class Neg(Unop):
         if isinstance(expr, Con):
             return Con(-expr.val)
 
+        if isinstance(expr, Neg):
+            return self.original_expr.original_expr
+
         return Neg(expr)
 
 
@@ -274,5 +281,5 @@ ex2 = Add(Con(2.5), Con(-2.5))
 ex3 = Mul(Var("x1"), Con(1))
 ex4 = Sub(Con(2.5), Con(1.0))
 ex5 = Div(Var("x1"), Var("x2"))
-ex6 = Neg(Var("x1"))
-print(ex6.diff("x1").simplify())
+ex6 = Neg(Neg(Var("x1")))
+print(ex6.simplify())
