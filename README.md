@@ -9,4 +9,4 @@
 - Andrei Nikiforov - 22211653
 - Sergei Baginskii - 22205148
 - Oleksii Kalashnikov - 22209805
-- Vladyslav Chornyi
+- Vladyslav Chornyi - 22211023
