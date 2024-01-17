@@ -2,6 +2,8 @@
 Author: Sergei Baginskii
 """
 
+import math
+
 class Expr:
     def __add__(self, other):
         if isinstance(other, int) or isinstance(other, float):
@@ -22,6 +24,9 @@ class Expr:
         if isinstance(other, int) or isinstance(other, float):
             other = Con(other)
         return Div(self, other)
+
+    def __neg__(self):
+        return Neg(self)
 
     def simplify(self):
         return self
@@ -72,22 +77,22 @@ class Var(Expr):
 
 
 class Unop(Expr):
-    def __init__(self, expr):
-        self.expr = expr
+    def __init__(self, arg):
+        self.arg = arg
 
     def __str__(self):
-        return f"{self.name}({self.expr})"
+        return f"{self.name}({self.arg})"
 
     def ev(self, env):
-        return self.op(self.expr.ev(env))
+        return self.op(self.arg.ev(env))
 
     def __eq__(self, other):
         if isinstance(other, Unop):
-            return self.name == other.name and self.expr == other.expr
+            return self.name == other.name and self.arg == other.arg
         return False
 
     def vs(self):
-        return self.expr
+        return self.arg.vs()
 
 class BinOp(Expr):
     def __init__(self, left, right):
@@ -159,6 +164,9 @@ class Sub(BinOp):
 
         if right == Con(0):
             return left
+
+        if left == right:
+            return Con(0)
 
         return left - right
 
@@ -232,21 +240,24 @@ class Div(BinOp):
 
         return left / right
 
+
 class Exp(Unop):
-    e_value = 3.1415926  # approximate so that there is no need to call math or numpy
     name = "exp"
-    op = lambda self, x: Exp.e_value ** x
+    op = lambda self, x: Exp(x)
 
     def diff(self, name):
-        return self.expr.diff(name) * Exp(self.expr)
+        if self.arg.diff(name) != 0:  # exponent is dependent of the variable
+            return Exp(self.arg)
+        else:  # not dependent
+            return 0
 
     def simplify(self):
-        expr = self.expr.simplify()
+        expr = self.arg.simplify()
         if expr.vs() == []:
             expr = expr.ev({})
 
         if isinstance(expr, Con):
-            return Con(Exp.e_value ** expr.val)
+            return Con(math.exp(expr.val))
 
         return Exp(expr)
 
@@ -255,15 +266,15 @@ class Neg(Unop):
     name = "-"
     op = lambda self, x: -x
 
-    def __init__(self, expr):
-        super().__init__(expr)
-        self.original_expr = self.expr
+    def __init__(self, arg):
+        super().__init__(arg)
+        self.original_expr = self.arg
 
     def diff(self, name):
-        return Neg(self.expr.diff(name))
+        return Neg(self.arg.diff(name))
 
     def simplify(self):
-        expr = self.expr.simplify()
+        expr = self.arg.simplify()
         if expr.vs() == []:
             expr = expr.ev({})
 
@@ -276,10 +287,16 @@ class Neg(Unop):
         return Neg(expr)
 
 
-ex1 = Add(Mul(Con(2.5), Var("x1")), Var("x2"))
-ex2 = Add(Con(2.5), Con(-2.5))
-ex3 = Mul(Var("x1"), Con(1))
-ex4 = Sub(Con(2.5), Con(1.0))
-ex5 = Div(Var("x1"), Var("x2"))
-ex6 = Neg(Neg(Var("x1")))
-print(ex6.simplify())
+env = {"x": 5}
+test1 = Con(1) / (Exp(-Var("x")) + Con(1))
+
+test2 = (Exp(Var("x")) - Exp(-Var("x")))/(Exp(Var("x")) + Exp(-Var("x")))
+
+
+print(f"First example in a string form: {test1.simplify()}")
+print(f"First example calculated {test1.ev(env).simplify()}")
+print(f"First example differentiated {test1.diff('x').simplify()}")
+print("\n")
+print(f"Second example in a string form: {test2.simplify()}")
+print(f"Second example calculated {test2.ev(env).simplify()}")
+print(f"Second example differentiated {test2.diff('x').simplify()}")
