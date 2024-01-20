@@ -28,7 +28,7 @@
 import random
 
 
-def win_check(board, player):
+def win_check(board, player):  # Author: Andrei Nikiforov
     # Rows and Columns
     for i in range(3):
         # Rows
@@ -48,7 +48,7 @@ def win_check(board, player):
     return False
 
 
-def find_symmetries(state):
+def find_symmetries(state):  # Author: Mikita Zyhmantovich. Feature was not fully implemented and therefore removed
     symmetries = []
     symmetry = ""
     for i in range(6, len(state)):
@@ -65,7 +65,7 @@ def find_symmetries(state):
     return symmetries
 
 
-def is_final(state):
+def is_final(state):  # Author: Mikita Zyhmantovich
     if not win_check(state, 'X') and not win_check(state, 'O'):  # if X didn't win as well as O and board is full then
         for char in state:  # it's a draw
             if char == '_':
@@ -73,7 +73,7 @@ def is_final(state):
     return True  # some player won, so the state is final
 
 
-def place(board, position):
+def place(board, position): # Author: Andrei Nikiforov
     if board.count('X') > board.count('O'):
         player = 'O'
     else:
@@ -82,7 +82,7 @@ def place(board, position):
     return board[:position] + player + board[position + 1:]
 
 
-def update(global_history, history, player):
+def update(global_history, history, player):  # Author: Mikita Zyhmantovich
     cnt = 0
     for step in history:
         state, move = step
@@ -93,19 +93,21 @@ def update(global_history, history, player):
         cnt += 1
 
 
-def train(global_history):
+def train(global_history):  # Author: Mikita Zyhmantovich
     NUM_GUMDROPS = 3
     state = initialise_board()
     history = []
     while not is_final(state):
-        symmetries = [state] + find_symmetries(state)
-        in_history = False
-        for symmetry in symmetries:
-            if symmetry in global_history.keys():
-                in_history = True
-                global_history[state] = global_history[symmetry]
-                break
-        if not in_history:
+        # Code that implements removed symmetry feature
+        # symmetries = [state] + find_symmetries(state)
+        # in_history = False
+        # for symmetry in symmetries:
+        #     if symmetry in global_history.keys():
+        #         in_history = True
+        #         global_history[state] = global_history[symmetry]
+        #         break
+        # if not in_history:
+        if state not in global_history.keys():
             global_history[state] = [NUM_GUMDROPS for _ in state if _ == '_']
         move = choose(global_history[state])
         history.append((state, move))
@@ -118,7 +120,7 @@ def train(global_history):
         update(global_history, history, '/')
 
 
-def choose(weights):
+def choose(weights):  # Author: Mikita Zyhmantovich
     total = sum(weights)
     roll = random.randint(1, total + 1)
     for i in range(len(weights)):
@@ -128,13 +130,13 @@ def choose(weights):
     return 0
 
 
-def choose_highest_value(weights):
+def choose_highest_value(weights): # Author: Andrei Nikiforov
     max_weight = max(weights)
     best_moves = [i for i in range(len(weights)) if weights[i] == max_weight]
     return random.choice(best_moves)
 
 
-def find_empty_index(board, index):
+def find_empty_index(board, index): # Author: Andrei Nikiforov
     empty_indices = []
 
     for i in range(len(board)):
@@ -148,7 +150,7 @@ def initialise_board():
     return '_________'
 
 
-def print_board(state):
+def print_board(state):  # Author: Mikita Zyhmantovich
     print("|", end="")
     cnt = 1
     for char in state:
@@ -158,7 +160,7 @@ def print_board(state):
         cnt += 1
 
 
-def play(model):
+def play(model): # Author: Mikita Zyhmantovich
     state = "_________"
     while not is_final(state):
         print_board(state)
@@ -178,9 +180,9 @@ def play(model):
         print("It's a draw")
 
 
-# menace = {}
-# for _ in range(20000):
-#     train(menace)
-#
-# print(menace)
-# play(menace)
+menace = {}
+for _ in range(20000):
+    train(menace)
+
+print(menace)
+play(menace)

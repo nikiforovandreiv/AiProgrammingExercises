@@ -17,6 +17,7 @@ class Menace:
         self._menace_system = {}
         self.supervise = supervise
         # parameter supervise enables bot, that makes "good" moves for menace to study better
+        # Author of supervisor: Mikita Zyhmantovich
         # dictionary containing all possible symmetries of a board. It has the following syntax:
         # numbers in the arrays in the dictionary represent in which places will the elements from old board
         # now be staying (i.e. in rotation for 90 degrees CLOCKWISE first element will be on the third place).

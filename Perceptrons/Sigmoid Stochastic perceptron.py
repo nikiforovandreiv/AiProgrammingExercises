@@ -1,3 +1,5 @@
+# Author: Mikita Zyhmantovich
+# Sigmoid stochastic perceptron
 import random
 import itertools
 import numpy as np
@@ -72,7 +74,7 @@ def create_dataset(size):
             new_digit = [[0 for _ in range(4)] for _ in range(4)]
             for i in range(4):
                 for j in range(4):
-                    new_digit[i][j] = ideal[key][i][j] + np.random.normal(0, 0.5)
+                    new_digit[i][j] = ideal[key][i][j] + np.random.normal(0, 0.5)  # add normalized noise
             data[key].append(new_digit)
     return data
 
