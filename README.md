@@ -14,7 +14,7 @@
 
 ### Tasks done:
 - Sergei Baginskii:
-        * Sudoku Solver DFS and BFS
-        * MENACE model (separate version)
-        * threshold and sigmoid perceptrons (separate version)
-        * Symbolic Expressions (tasks 1 and 2)
+        - Sudoku Solver DFS and BFS
+        - MENACE model (separate version)
+        - threshold and sigmoid perceptrons (separate version)
+        - Symbolic Expressions (tasks 1 and 2)
