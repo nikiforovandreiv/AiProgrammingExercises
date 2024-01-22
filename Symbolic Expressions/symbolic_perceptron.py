@@ -15,7 +15,7 @@ import data_creator
 def linear(xs):
     s = Var("w0")  # bias
     for i in range(len(xs)):
-        s = s + Var(f"w{i+1}")*xs[i]
+        s = s + Var(f"w{i + 1}")*xs[i]
     return s
 
 
@@ -53,17 +53,20 @@ class Perceptron:
 
     def output(self, inp):
         formula = self.sigma(inp)
-        num_result = formula.ev(self.weights)
-        return num_result.simplify()
+        return formula
 
     def loss(self):
         err = 0
         for i in range(len(self.training_set)):
             xs = self.training_set[i]
             t = Con(self.training_targets[i])
-            o = self.output(xs)
+            o = self.output(xs).ev(self.weights).simplify()
             err += ((t - o) * (t - o)).simplify().val
         return err / 2
+
+    def partial_der(self, inputs, target, key):
+        temp = ((target - self.output(inputs)) * (target - self.output(inputs))).diff(key).simplify().ev(self.weights).simplify()
+        return temp
 
     def train(self):
         maxepoch = 1000
@@ -78,18 +81,16 @@ class Perceptron:
                 # choose the element for updating
                 current_elem = Perceptron.rng.integers(0, self.training_set.shape[0], 1)[0]
                 curr_values = self.training_set[current_elem]
-                result = self.output(curr_values)
                 target = Con(self.training_targets[current_elem])
-                updates["w0"] += (alpha * (target - result) * result * (Con(1) - result)).simplify().val
                 for key in self.weights.keys():
-                    value = Con(curr_values[int(key[1]) - 1])
-                    updates[key] += (alpha * (target - result) * result * (Con(1) - result) * value).simplify().val
+                    updates[key] -= (alpha * self.partial_der(curr_values, target, key)).simplify().val
             for w in self.weights.keys():
                 self.weights[w] += updates[w]
-            if e % 200 == 0: print(f"epoch{e}: loss = {self.loss()}")
+            if e % 10 == 0: print(f"epoch{e}: loss = {self.loss()}")
 
 
 if __name__ == "__main__":
     perceptron = Perceptron(ninp=16, sigma=sigmoid)
     perceptron.train()
-    print(perceptron.output(np.array([0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0], dtype=float)))
+    print(perceptron.output(np.array([0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+                                     dtype=float)).ev(perceptron.weights).simplify())
