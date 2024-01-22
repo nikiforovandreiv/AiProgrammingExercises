@@ -160,7 +160,7 @@ class Sub(BinOp):
             return Con(left.val - right.val)
 
         if left == Con(0):
-            return right
+            return -right
 
         if right == Con(0):
             return left
@@ -202,6 +202,12 @@ class Mul(BinOp):
 
         if right == Con(1):
             return left
+
+        if left == Con(-1):
+            return -right
+
+        if right == Con(-1):
+            return -left
 
         return left * right
 
@@ -247,9 +253,7 @@ class Exp(Unop):
 
     def diff(self, name):
         if self.arg.diff(name) != 0:  # exponent is dependent of the variable
-            return Exp(self.arg)
-        else:  # not dependent
-            return 0
+            return Exp(self.arg) * self.arg.diff(name)
 
     def simplify(self):
         expr = self.arg.simplify()
@@ -258,6 +262,9 @@ class Exp(Unop):
 
         if isinstance(expr, Con):
             return Con(math.exp(expr.val))
+
+        if expr == Con(0):
+            return Con(1)
 
         return Exp(expr)
 
@@ -287,16 +294,18 @@ class Neg(Unop):
         return Neg(expr)
 
 
-env = {"x": 5}
-test1 = Con(1) / (Exp(-Var("x")) + Con(1))
+if __name__ == "__main__":
+    env = {"x": 5}
+    test1 = Con(1) / (Exp(-Var("x")) + Con(1))
+    test2 = (Exp(Var("x")) - Exp(-Var("x")))/(Exp(Var("x")) + Exp(-Var("x")))
 
-test2 = (Exp(Var("x")) - Exp(-Var("x")))/(Exp(Var("x")) + Exp(-Var("x")))
+    test3 = (Con(0) - -Con(1))
+    print(test3.simplify().simplify())
 
-
-print(f"First example in a string form: {test1.simplify()}")
-print(f"First example calculated {test1.ev(env).simplify()}")
-print(f"First example differentiated {test1.diff('x').simplify()}")
-print("\n")
-print(f"Second example in a string form: {test2.simplify()}")
-print(f"Second example calculated {test2.ev(env).simplify()}")
-print(f"Second example differentiated {test2.diff('x').simplify()}")
+    print(f"First example in a string form: {test1.simplify()}")
+    print(f"First example calculated {test1.ev(env).simplify()}")
+    print(f"First example differentiated {test1.diff('x').simplify()}")
+    print("\n")
+    print(f"Second example in a string form: {test2.simplify()}")
+    print(f"Second example calculated {test2.ev(env).simplify()}")
+    print(f"Second example differentiated {test2.diff('x').simplify()}")
