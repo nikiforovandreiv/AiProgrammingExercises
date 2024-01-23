@@ -22,3 +22,11 @@ Sergei Baginskii:
 Oleksii Kalashnikov:
 * SAT and SMT: Question 2
 * Lady & The Tigers all trials
+
+ Mikita Zyhmantovich: 
+* Simple Python excercises(collaborated with Vladyslav Chornyi and Andrei Nikiforov)
+* Python excercises 4.9(2 out of 5)
+* Maze(DFS, BFS, A star)
+* MENACE(collaborated with Andrei Nikiforov)
+* Supervisor for separate MENACE(Sergei Baginskii's MENACE)
+* Threshold and sigmoid perceptron
