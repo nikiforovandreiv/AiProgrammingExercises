@@ -3,7 +3,7 @@
 import random
 import itertools
 import numpy as np
-from sklearn.metrics import accuracy_score
+import help_functions as hp
 
 rng = np.random.default_rng(123)
 
@@ -14,6 +14,8 @@ class Perceptron:
     def __init__(self, ninp, activation=threshold):
         self.ninp = ninp
         self.weights = rng.random(ninp + 1)
+        for i in range(ninp + 1):
+            self.weights[i] /= 10
         self.activation = activation
 
     def out(self, xs):
@@ -52,33 +54,12 @@ class Perceptron:
                 target = digit
                 truth.append(target)
                 predicted.append(output)
-        return accuracy_score(truth, predicted)
-
-
-def create_dataset(size):
-    ideal = {}
-    ideal[0] = [[0, 1, 1, 0],
-                [1, 0, 0, 1],
-                [1, 0, 0, 1],
-                [0, 1, 1, 0]]
-    ideal[1] = [[0, 0, 1, 0],
-                [0, 1, 1, 0],
-                [0, 0, 1, 0],
-                [0, 0, 1, 0]]
-    data = {0: [ideal[0]], 1: [ideal[1]]}
-    for _ in range(size - 1):
-        for key in ideal.keys():
-            new_digit = [[0 for _ in range(4)] for _ in range(4)]
-            for i in range(4):
-                for j in range(4):
-                    new_digit[i][j] = ideal[key][i][j] + np.random.normal(0, 0.5)  # add normalized noise
-            data[key].append(new_digit)
-    return data
+        return hp.accuracy_score(truth, predicted)
 
 
 digits_classifier = Perceptron(16)
-train_dataset = create_dataset(90)
-test_dataset = create_dataset(10)
+train_dataset = hp.create_dataset(90)
+test_dataset = hp.create_dataset(10)
 digits_classifier.train(train_dataset)
 accuracy = digits_classifier.measure(test_dataset)
 print(f"Test accuracy is: {accuracy * 100}%")
