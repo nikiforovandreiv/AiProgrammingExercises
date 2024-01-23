@@ -18,3 +18,7 @@ Sergei Baginskii:
 * MENACE model (separate version)
 * threshold and sigmoid perceptrons (separate   version)
 * Symbolic Expressions (tasks 1 and 2)
+
+Oleksii Kalashnikov:
+* SAT and SMT: Question 2
+* Lady & The Tigers all trials
