@@ -17,7 +17,6 @@ Andrei Nikiforov:
 * Python excercises 2.7
 * Python excercises 4.9(3 out of 5)
 * MENACE(collaborated with Mikita Zyhmantovich)
-* Search {depth, breath, A*} x {Queens, Maze, Puzzle, Sudoku}
 * BFS (N_Queens, Sliding Tiles Puzzle)
 
 Sergei Baginskii:
@@ -30,6 +29,7 @@ Oleksii Kalashnikov:
 * SAT and SMT: Question 2
 * Lady & The Tigers all trials
 * N_Queens(DFS, A star)
+* Sliding tiles(DFS)
 
  Mikita Zyhmantovich: 
 * Simple Python excercises(collaborated with Vladyslav Chornyi and Andrei Nikiforov)
