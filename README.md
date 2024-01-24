@@ -22,6 +22,7 @@ Sergei Baginskii:
 Oleksii Kalashnikov:
 * SAT and SMT: Question 2
 * Lady & The Tigers all trials
+* N_Queens(DFS, A star)
 
  Mikita Zyhmantovich: 
 * Simple Python excercises(collaborated with Vladyslav Chornyi and Andrei Nikiforov)
