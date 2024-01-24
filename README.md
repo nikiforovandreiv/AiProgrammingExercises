@@ -18,7 +18,7 @@ Andrei Nikiforov:
 * Python excercises 4.9(3 out of 5)
 * MENACE(collaborated with Mikita Zyhmantovich)
 * Search {depth, breath, A*} x {Queens, Maze, Puzzle, Sudoku}
-* NN with Backtracking (Bonus)
+* BFS (N_Queens, Sliding Tiles Puzzle)
 
 Sergei Baginskii:
 * Sudoku Solver DFS and BFS
