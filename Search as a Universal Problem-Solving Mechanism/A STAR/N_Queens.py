@@ -48,4 +48,4 @@ def format_result(result):
     else:
         print("No solution found")
 
-format_result(a_star_search(20))
+format_result(a_star_search(10))
