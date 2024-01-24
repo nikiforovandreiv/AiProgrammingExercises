@@ -13,6 +13,13 @@
 
 
 ### Tasks done:
+Andrei Nikiforov:
+* Python excercises 2.7(3 out of 5)
+* Python excercises 4.9(3 out of 5)
+* MENACE(collaborated with Mikita Zyhmantovich)
+* Search {depth, breath, A*} x {Queens, Maze, Puzzle, Sudoku}
+* NN with Backtracking (Bonus)
+
 Sergei Baginskii:
 * Sudoku Solver DFS and BFS
 * MENACE model (separate version)
