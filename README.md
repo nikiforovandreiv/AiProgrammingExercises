@@ -38,3 +38,8 @@ Oleksii Kalashnikov:
 * MENACE(collaborated with Andrei Nikiforov)
 * Supervisor for separate MENACE(Sergei Baginskii's MENACE)
 * Threshold and sigmoid perceptron
+
+
+Vladyslav Chornyi:
+* A star sudoku
+* A star sliding tiles
